@@ -12,6 +12,12 @@ class ModCommands(commands.Cog):
     async def say(self, ctx, *, message):
         await ctx.send(message)
 
+        #warn command
+    @commands.command()
+    @commands.has_permissions(oderate_members=True)
+    async def warn(self, stc, member: discord.Member, *, reason=None):
+        pass
+
         #ban command
     @commands.command()
     @commands.has_permissions(ban_members=True)

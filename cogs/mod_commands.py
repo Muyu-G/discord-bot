@@ -15,7 +15,7 @@ class ModCommands(commands.Cog):
 
         #warn command
     @commands.command()
-    @commands.has_permissions(oderate_members=True)
+    @commands.has_permissions(moderate_members=True)
     async def warn(self, ctx, member: discord.Member, *, reason=None):
         add_warning(member.id, ctx.guild.id, reason or "No reason provided")
         embed = discord.Embed(

@@ -2,3 +2,4 @@ other/
 .env
 .log
 venv/
+cogs/__pycache__

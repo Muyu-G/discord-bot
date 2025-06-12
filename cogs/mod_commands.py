@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from datetime import timedelta
+from database import add_warning, get_warnings
 
 class ModCommands(commands.Cog):
     def __init__(self, bot):
@@ -15,8 +16,30 @@ class ModCommands(commands.Cog):
         #warn command
     @commands.command()
     @commands.has_permissions(oderate_members=True)
-    async def warn(self, stc, member: discord.Member, *, reason=None):
-        pass
+    async def warn(self, ctx, member: discord.Member, *, reason=None):
+        add_warning(member.id, ctx.guild.id, reason or "No reason provided")
+        embed = discord.Embed(
+            title="User warned",
+            description=f"{member.name} was wanned",
+            color=0xFFCC4D
+        )
+        embed.add_field(name="Reason",value=reason or "No reason provided", inline=False)
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    @commands.has_permissions(moderate_members=True)
+    async def warnings(self, ctx, member: discord.Member):
+        warnings = get_warnings(member.id, ctx.guild.id)
+        embed = discord.Embed(
+            title=f"Warnings for {member.name}",
+            color=0x00ff00
+        )
+        if warnings:
+            for i, (reason, timestamp) in enumerate(warnings, 1):
+                embed.add_field(name=f"Warning {i}", value=f"Reason: {reason}\nTime: {timestamp}", inline=False)
+        else:
+            embed.description = "No warnings found."
+        await ctx.send(embed=embed)
 
         #ban command
     @commands.command()

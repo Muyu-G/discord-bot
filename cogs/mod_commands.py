@@ -20,7 +20,7 @@ class ModCommands(commands.Cog):
         add_warning(member.id, ctx.guild.id, reason or "No reason provided")
         embed = discord.Embed(
             title="User warned",
-            description=f"{member.name} was wanned",
+            description=f"{member.mention} was wanned",
             color=0xFFCC4D
         )
         embed.add_field(name="Reason",value=reason or "No reason provided", inline=False)
@@ -32,7 +32,7 @@ class ModCommands(commands.Cog):
     async def warnings(self, ctx, member: discord.Member = None):
         warnings = get_warning(member.id, ctx.guild.id)
         embed = discord.Embed(
-            title=f"Warnings for {member.name}",
+            title=f"Warnings for {member.mention}",
             color=0x00ff00
         )
         if warnings:
@@ -146,7 +146,35 @@ class ModCommands(commands.Cog):
             
             await ctx.send(embed=embed, delete_after=5)
 
+        #lock channel command - to lock channels
+    @commands.command()
+    @commands.has_permissions(manage_channels=True)
+    async def lock(self, ctx):
+        await ctx.channel.set_permission(ctx.guild.default_role, send_messages=False) #ctx.guild.default_role = @everyone role
+        await ctx.send("Channel locked successfully", delete_after=5)
+        
+        #unlock channel command
+    @commands.command()
+    @commands.has_permissions(manage_channels=True)
+    async def unlock(self, ctx):
+        await ctx.channel.set_permission(ctx.guild.default_role, send_messages=True)
+        await ctx.send("Channel unlocked successfully", delete_after=5)
+        
+        #addrole command
+    @commands.command()
+    @commands.has_guild_permissions(manage_roles=True)
+    async def addrole(self, ctx, member: discord.Member, role: discord.Role, reason=None):
+        await member.add_roles(role, reason=reason)
+        await ctx.send(f"{member.name} was given {role.name}, reason {reason}")
+        
+        #remove command
+    @commands.command()
+    @commands.has_guild_permissions(manage_roles=True)
+    async def removerole(self, ctx, member: discord.Member, role: discord.Role, reason=None):
+        await member.remove_roles(role, reason=reason)
+        await ctx.send(f"{role.name} was removed from {member.name}, reason {reason}")
 
+    
     @clear.error
     async def clear_error(self, ctx, error):
         if isinstance(error, commands.MissingPermissions):

@@ -55,9 +55,9 @@ class UserInfo(commands.Cog):
         await ctx.send(embed=embed)
 
     #botinfo command
-    @commands.hybrid_command(name="botinfo", description="Displays bot info")
+    @commands.command()
     async def botinfo(self, ctx):
-        bot_user = self.bot.user
+        bot_user = self.bot.display_name
         embed = discord.Embed(
             title=f"{bot_user}'s Info",
             color=0x5865F2

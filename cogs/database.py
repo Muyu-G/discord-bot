@@ -35,6 +35,6 @@ def get_warning(user_id, guild_id):
     conn = sqlite3.connect("warnings.db")
     c = conn.cursor()
     c.execute("SELECT reason, timestamp FROM warnings WHERE user_id = ? AND guild_id = ?", (user_id, guild_id))
-    warnings = c.fetchall()  #Fetches all rows matching the query
+    warnings = c.fetchall()  #Fetches all rows matching the query. Each row is returned as a tuple like: ("spamming", "2025-06-27 12:00")
     conn.close()
     return warnings

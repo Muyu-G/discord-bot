@@ -11,7 +11,7 @@ class UserInfo(commands.Cog):
         embed = discord.Embed(
             title="Bot Latency",
             color=0x77B255,
-            description=f"Latency {round(self.bot.latency * 1000)}ms"
+            description=f"🏓 Pong! Latency: {round(self.bot.latency * 1000)}ms"  #converting to ms the rounding
             )
         
         await ctx.send(embed=embed)
@@ -54,7 +54,7 @@ class UserInfo(commands.Cog):
         
         await ctx.send(embed=embed)
 
-#botinfo command
+    #botinfo command
     @commands.hybrid_command(name="botinfo", description="Displays bot info")
     async def botinfo(self, ctx):
         bot_user = self.bot.user
@@ -89,6 +89,50 @@ class UserInfo(commands.Cog):
         embed.set_thumbnail(
             url=bot_user.avatar.url if bot_user.avatar else None
         )
+        await ctx.send(embed=embed)
+        
+    #serverinfo command
+    @commands.command()
+    async def serverinfo(self, ctx):
+        guild = ctx.guild
+        embed = discord.Embed(
+            title=f"{guild.name}'s info",
+            color=0xA17FE0
+        )
+        
+        embed.add_field(
+            name="Members: ", 
+            value=guild.member_count, 
+            inline=True
+        )
+
+        embed.add_field(
+            name="Channels: ",
+            value=len(guild.channels),
+            inline=True
+        )
+        
+        embed.add_field(
+            name="Server ID: ",
+            value=guild.id,
+            inline=True
+        )
+                
+        embed.add_field(
+            name="Created on: ",
+            value=guild.created_at.strftime("%d/%m/%Y"),
+            inline=True
+        )
+        
+        embed.set_thumbnail(
+            url=guild.icon.url if guild.icon else discord.Embed.Empty
+        )
+        
+        embed.set_footer(
+            text=f"Requested by {ctx.author.name}",
+            icon_url=ctx.author.avatar.url if ctx.author.avatar else None
+        )
+
         await ctx.send(embed=embed)
 
 async def setup(bot):

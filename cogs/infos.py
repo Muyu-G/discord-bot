@@ -6,18 +6,18 @@ class UserInfo(commands.Cog):
         self.bot = bot
 
     #ping command
-    @commands.hybrid_command(name="ping", description="Bot latency")
+    @commands.command()
     async def ping(self, ctx):
         embed = discord.Embed(
             title="Bot Latency",
             color=0x77B255,
-            description=f"🏓 Pong! Latency: {round(self.bot.latency * 1000)}ms"  #converting to ms the rounding
+            description=f"🏓 Pong! Latency: {round(self.bot.latency * 1000)}ms"  # converting to ms then rounding
             )
         
         await ctx.send(embed=embed)
 
     #userinfo command
-    @commands.hybrid_command(name="userinfo", description="Displays a user info")
+    @commands.command()
     async def userinfo(self, ctx, member: discord.Member = None):
         member = member or ctx.author
         embed = discord.Embed(
@@ -58,6 +58,7 @@ class UserInfo(commands.Cog):
     @commands.command()
     async def botinfo(self, ctx):
         bot_user = self.bot.display_name
+        
         embed = discord.Embed(
             title=f"{bot_user}'s Info",
             color=0x5865F2
@@ -78,6 +79,12 @@ class UserInfo(commands.Cog):
         embed.add_field(
             name="Latency",
             value=f"{round(self.bot.latency * 1000)} ms",
+            inline=False
+        )
+        
+        embed.add_field(
+            name="Guilds",
+            value=len(self.bot.guilds),
             inline=False
         )
 

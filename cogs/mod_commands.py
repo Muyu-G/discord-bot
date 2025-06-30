@@ -58,7 +58,7 @@ class ModCommands(commands.Cog):
         name="Reason", 
         value=reason or None, 
         inline=False
-        )
+            )
 
         await ctx.send(embed=embed)
 
@@ -78,7 +78,7 @@ class ModCommands(commands.Cog):
         embed.add_field(name="Reason", 
         value=reason or None, 
         inline=False
-        )
+            )
 
         await ctx.send(embed=embed)
 
@@ -89,7 +89,7 @@ class ModCommands(commands.Cog):
         await member.kick(reason=reason)
 
         embed = discord.Embed(
-            title="Member kicked 👻", 
+            title="Member kicked", 
             description=f"{member.mention} was kicked from the guild", 
             color=0xF04747
             )
@@ -106,7 +106,7 @@ class ModCommands(commands.Cog):
     @commands.command()
     @commands.has_permissions(moderate_members=True)
     async def mute(self, ctx, member: discord.Member, *, minutes: int, reason = None):
-        duration = timedelta(minutes=minutes)
+        duration = timedelta(minutes=minutes) # timeout in minutes
         await member.timeout(duration, reason=reason)
 
         embed = discord.Embed(
@@ -165,14 +165,18 @@ class ModCommands(commands.Cog):
     @commands.has_guild_permissions(manage_roles=True)
     async def addrole(self, ctx, member: discord.Member, role: discord.Role, reason=None):
         await member.add_roles(role, reason=reason)
-        await ctx.send(f"{member.name} was given {role.name}, reason {reason}")
+        if reason:
+            await ctx.send(f"{member.name} was given {role.name}, reason {reason}")
+        await ctx.send(f"{member.name} was given {role.name}")
         
         #remove command
     @commands.command()
     @commands.has_guild_permissions(manage_roles=True)
     async def removerole(self, ctx, member: discord.Member, role: discord.Role, reason=None):
         await member.remove_roles(role, reason=reason)
-        await ctx.send(f"{role.name} was removed from {member.name}, reason {reason}")
+        if reason:
+            await ctx.send(f"{member.name} was given {role.name}, reason {reason}")
+        await ctx.send(f"{member.name} was given {role.name}")
 
     
     @clear.error
